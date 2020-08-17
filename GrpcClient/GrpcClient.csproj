@@ -1,0 +1,26 @@
+﻿<Project Sdk="Microsoft.NET.Sdk">
+
+	<PropertyGroup>
+		<OutputType>Exe</OutputType>
+		<TargetFramework>netcoreapp3.1</TargetFramework>
+	</PropertyGroup>
+
+	<ItemGroup>
+		<Protobuf Include="..\Protos\greet.proto" GrpcServices="Client" Link="Protos\greet.proto" />
+	</ItemGroup>
+
+	<ItemGroup>
+		<PackageReference Include="Google.Protobuf" Version="3.13.0" />
+		<PackageReference Include="Grpc.Auth" Version="2.31.0" PrivateAssets="All" />
+		<PackageReference Include="Grpc.Core" Version="2.31.0" PrivateAssets="All" />
+		<PackageReference Include="Grpc.Net.Client" Version="2.31.0" />
+		<PackageReference Include="Grpc.Tools" Version="2.31.0" PrivateAssets="All" />
+	</ItemGroup>
+
+	<ItemGroup>
+	  <None Update="Certs\client1.pem">
+	    <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+	  </None>
+	</ItemGroup>
+
+</Project>
