@@ -12,17 +12,13 @@ namespace GrpcClient
 {
     internal static class Program
     {
-
         private static byte[]? GetBytesFromPem(string pemString, string section)
         {
             var header = $"-----BEGIN {section}-----";
             var footer = $"-----END {section}-----";
             var start = pemString.IndexOf(header, StringComparison.Ordinal);
 
-            if (start == -1)
-            {
-                return null;
-            }
+            if (start == -1) return null;
 
             start += header.Length;
             var end = pemString.IndexOf(footer, start, StringComparison.Ordinal) - start;
@@ -32,7 +28,6 @@ namespace GrpcClient
 
         private static async Task<GrpcChannel> CreateChannel()
         {
-
             var httpClientHandler = new HttpClientHandler();
             var pem = await File.ReadAllTextAsync("Certs/client1.pem");
             var certData = GetBytesFromPem(pem, "CERTIFICATE");
@@ -40,10 +35,10 @@ namespace GrpcClient
 
             httpClientHandler.ClientCertificates.Add(cert);
 
-            var channel = GrpcChannel.ForAddress($"https://localhost:5001", new GrpcChannelOptions
+            var channel = GrpcChannel.ForAddress("https://localhost:5001", new GrpcChannelOptions
             {
                 Credentials = new SslCredentials(),
-                HttpHandler = httpClientHandler,
+                HttpHandler = httpClientHandler
             });
 
             return channel;
@@ -52,10 +47,10 @@ namespace GrpcClient
         private static async Task Main(string[] args)
         {
             var channel = await CreateChannel();
-            
+
             var client = new Greeter.GreeterClient(channel);
             Console.WriteLine("Client ping");
-            
+
             var response = await client.SayHelloAsync(new HelloRequest
             {
                 Name = "client1"

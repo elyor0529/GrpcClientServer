@@ -1,11 +1,6 @@
-using System;
-using System.Collections.Generic;
 using System.IO;
-using System.Linq;
-using System.Threading.Tasks;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Server.Kestrel.Core;
-using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.Hosting;
 
 namespace GrpcServer
@@ -17,12 +12,13 @@ namespace GrpcServer
             CreateHostBuilder(args).Build().Run();
         }
 
-        public static IHostBuilder CreateHostBuilder(string[] args) =>
-            Host.CreateDefaultBuilder(args)
+        public static IHostBuilder CreateHostBuilder(string[] args)
+        {
+            return Host.CreateDefaultBuilder(args)
                 .ConfigureWebHostDefaults(webBuilder =>
                 {
                     webBuilder.ConfigureKestrel((context, options) =>
-                    { 
+                    {
                         options.Limits.MinRequestBodyDataRate = null;
                         options.ListenAnyIP(5001, o =>
                         {
@@ -32,9 +28,9 @@ namespace GrpcServer
                             o.UseHttps(certPath, "1111");
                             o.Protocols = HttpProtocols.Http2;
                         });
-
                     });
                     webBuilder.UseStartup<Startup>();
                 });
+        }
     }
 }
