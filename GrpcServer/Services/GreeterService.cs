@@ -20,7 +20,7 @@ namespace GrpcServer.Services
 
             return Task.FromResult(new HelloReply
             {
-                Message = DateTime.Now.ToString("F") + " - File: " + request.Name + " Size:" + request.Data.Length
+                Message = "Tuk : " + DateTime.Now.ToString("F") + " , File: " + request.Name + " , Bytes:" + request.Data.Length
             });
         }
     }

@@ -25,11 +25,8 @@ namespace GrpcClient
 
             var files = Directory.GetFiles(Path.Combine(Environment.CurrentDirectory, "db"), "*.json", SearchOption.AllDirectories);
 
-            Enumerable.Range(0, 1000)
+            Enumerable.Range(0, 5000)
                  .AsParallel()
-                 .WithExecutionMode(ParallelExecutionMode.ForceParallelism)
-                 .WithMergeOptions(ParallelMergeOptions.FullyBuffered)
-                 .WithDegreeOfParallelism(4)
                  .ForAll(async (part) =>
                  {
                      var random = new Random();
@@ -56,10 +53,11 @@ namespace GrpcClient
             var data = await File.ReadAllTextAsync(file);
             var response = await client.SayHelloAsync(new HelloRequest
             {
-                Name = $"client{part} sending {Path.GetFileName(file)}",
+                Name = $"Client{part} sending {Path.GetFileName(file)}",
                 Data = data
             });
             timer.Stop();
+
             Console.WriteLine("Server pull:{0}({1:g})", response.Message, timer.Elapsed);
         }
     }
