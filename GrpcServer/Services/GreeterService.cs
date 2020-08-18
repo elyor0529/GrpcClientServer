@@ -1,3 +1,4 @@
+using System;
 using System.Threading.Tasks;
 using Grpc.Core;
 using Microsoft.Extensions.Logging;
@@ -19,7 +20,7 @@ namespace GrpcServer.Services
 
             return Task.FromResult(new HelloReply
             {
-                Message = "Hello " + request.Name
+                Message = DateTime.Now.ToString("F") + " - File: " + request.Name + " Size:" + request.Data.Length
             });
         }
     }

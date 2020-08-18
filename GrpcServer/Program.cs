@@ -14,7 +14,13 @@ namespace GrpcServer
         {
             return Host.CreateDefaultBuilder(args)
                 .ConfigureWebHostDefaults(webBuilder =>
-                { 
+                {
+
+                    webBuilder.ConfigureKestrel(options =>
+                    {
+                        options.Limits.MaxRequestBodySize = null; 
+                    });
+
                     webBuilder.UseStartup<Startup>();
                 });
         }

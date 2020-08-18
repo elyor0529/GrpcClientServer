@@ -17,4 +17,13 @@
 		<PackageReference Include="Grpc.Tools" Version="2.31.0" PrivateAssets="All" />
 	</ItemGroup>
 
+	<ItemGroup>
+	  <None Update="customers.json">
+	    <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+	  </None>
+	  <None Update="orders.json">
+	    <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+	  </None>
+	</ItemGroup>
+
 </Project>

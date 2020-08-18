@@ -11,7 +11,11 @@ namespace GrpcServer
     {
         public void ConfigureServices(IServiceCollection services)
         {
-            services.AddGrpc();
+            services.AddGrpc(options =>
+            {
+                options.MaxReceiveMessageSize = 65 * 1024 * 1024; 
+                options.MaxSendMessageSize = 65 * 1024 * 1024;  
+            });
         }
 
         public void Configure(IApplicationBuilder app, IWebHostEnvironment env)

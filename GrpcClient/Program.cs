@@ -1,4 +1,6 @@
 ﻿using System;
+using System.Diagnostics;
+using System.IO;
 using System.Net.Http;
 using System.Threading.Tasks;
 using Grpc.Core;
@@ -10,7 +12,7 @@ namespace GrpcClient
     internal static class Program
     {
         private static async Task Main(string[] args)
-        { 
+        {
             var httpHandler = new HttpClientHandler
             {
                 ServerCertificateCustomValidationCallback = HttpClientHandler.DangerousAcceptAnyServerCertificateValidator
@@ -22,13 +24,20 @@ namespace GrpcClient
             var client = new Greeter.GreeterClient(channel);
             Console.WriteLine("Client ping");
 
-            var response = await client.SayHelloAsync(new HelloRequest
+            for (var i = 0; i < 100; i++)
             {
-                Name = "client1"
-            });
-            Console.WriteLine("Server pull:{0}", response.Message);
+                var timer = new Stopwatch();
+                timer.Start();
+                var response = await client.SayHelloAsync(new HelloRequest
+                {
+                    Name = string.Format("client1 {0}", i % 2 == 0 ? "orders" : "customers"),
+                    Data = await File.ReadAllTextAsync(i % 2 == 0 ? "orders.json" : "customers.json")
+                });
+                timer.Stop();
+                Console.WriteLine("Server pull:{0}({1:g})", response.Message, timer.Elapsed);
+            }
 
-            Console.WriteLine("Done!{0}",args);
+            Console.WriteLine("Done!");
         }
     }
 }
