@@ -27,10 +27,7 @@ namespace GrpcServer
 
                     webBuilder.UseSerilog((hst, cnf) =>
                     {
-                        cnf.MinimumLevel.Error();
-                        cnf.ReadFrom.Configuration(hst.Configuration);
                         cnf.Enrich.FromLogContext();
-                        cnf.Enrich.WithProperty("ApplicationName", hst.HostingEnvironment.ApplicationName);
                         cnf.WriteTo.ColoredConsole();
                         cnf.WriteTo.File("Logs/app.log", rollingInterval: RollingInterval.Day, rollOnFileSizeLimit: true);
                     });
