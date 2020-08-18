@@ -3,7 +3,6 @@ using System.Diagnostics;
 using System.IO;
 using System.Net.Http;
 using System.Threading.Tasks;
-using Grpc.Core;
 using Grpc.Net.Client;
 using GrpcServer;
 
@@ -13,6 +12,8 @@ namespace GrpcClient
     {
         private static async Task Main(string[] args)
         {
+            Console.Title = "Grpc Client";
+
             var httpHandler = new HttpClientHandler
             {
                 ServerCertificateCustomValidationCallback = HttpClientHandler.DangerousAcceptAnyServerCertificateValidator
@@ -28,10 +29,12 @@ namespace GrpcClient
             {
                 var timer = new Stopwatch();
                 timer.Start();
+                var file = i % 2 == 0 ? "orders.json" : "customers.json";
+                var data = await File.ReadAllTextAsync(file);
                 var response = await client.SayHelloAsync(new HelloRequest
                 {
-                    Name = string.Format("client1 {0}", i % 2 == 0 ? "orders" : "customers"),
-                    Data = await File.ReadAllTextAsync(i % 2 == 0 ? "orders.json" : "customers.json")
+                    Name = $"client1 sending {file}",
+                    Data = data
                 });
                 timer.Stop();
                 Console.WriteLine("Server pull:{0}({1:g})", response.Message, timer.Elapsed);
