@@ -17,10 +17,4 @@
 		<PackageReference Include="Grpc.Tools" Version="2.31.0" PrivateAssets="All" />
 	</ItemGroup>
 
-	<ItemGroup>
-	  <None Update="Certs\client1.pem">
-	    <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-	  </None>
-	</ItemGroup>
-
 </Project>

@@ -16,20 +16,19 @@ namespace GrpcServer
 
         public void Configure(IApplicationBuilder app, IWebHostEnvironment env)
         {
-            if (env.IsDevelopment()) app.UseDeveloperExceptionPage();
+            if (env.IsDevelopment())
+                app.UseDeveloperExceptionPage();
 
             app.UseRouting();
-
+             
             app.UseEndpoints(endpoints =>
             {
                 endpoints.MapGrpcService<GreeterService>();
 
-                endpoints.MapGet("/",
-                    async context =>
-                    {
-                        await context.Response.WriteAsync(
-                            "Communication with gRPC endpoints must be made through a gRPC client.");
-                    });
+                endpoints.MapGet("/", async context =>
+                 {
+                     await context.Response.WriteAsync("Communication with gRPC endpoints must be made through a gRPC client.");
+                 });
             });
         }
     }
