@@ -5,10 +5,18 @@
 	</PropertyGroup>
 
 	<ItemGroup>
+		<Compile Remove="Logs\**" />
 		<Compile Remove="Properties\PublishProfiles\**" />
+		<Content Remove="Logs\**" />
 		<Content Remove="Properties\PublishProfiles\**" />
+		<EmbeddedResource Remove="Logs\**" />
 		<EmbeddedResource Remove="Properties\PublishProfiles\**" />
+		<None Remove="Logs\**" />
 		<None Remove="Properties\PublishProfiles\**" />
+	</ItemGroup>
+
+	<ItemGroup>
+	  <Content Include="Logs\readme.txt" />
 	</ItemGroup>
 
 	<ItemGroup>
@@ -23,12 +31,6 @@
 
 	<ItemGroup>
 		<PackageReference Include="Grpc.AspNetCore" Version="2.27.0" />
-	</ItemGroup>
-
-	<ItemGroup>
-	  <None Update="Logs\readme.txt">
-	    <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-	  </None>
 	</ItemGroup>
 
 </Project>

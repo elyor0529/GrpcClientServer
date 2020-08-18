@@ -22,7 +22,8 @@ namespace GrpcServer
 
                     webBuilder.ConfigureKestrel(options =>
                     {
-                        options.Limits.MaxRequestBodySize = null; 
+                        options.Limits.MaxRequestBodySize = null;
+                        options.Limits.MinRequestBodyDataRate = null;
                     });
 
                     webBuilder.UseSerilog((hst, cnf) =>
