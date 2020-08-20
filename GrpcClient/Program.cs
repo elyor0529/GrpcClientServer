@@ -11,30 +11,28 @@ namespace GrpcClient
 {
     internal static class Program
     {
-        private static void Main(string[] args)
+        private static async Task Main(string[] args)
         {
             Console.Title = "Grpc Client";
 
-            BatchProcess();
+            await BatchProcess();
 
             Console.WriteLine("Done!");
         }
 
-        private static void BatchProcess()
+        private static async Task BatchProcess()
         {
 
             var files = Directory.GetFiles(Path.Combine(Environment.CurrentDirectory, "db"), "*.json", SearchOption.AllDirectories);
 
-            Enumerable.Range(0, 5000)
-                 .AsParallel()
-                 .ForAll(async (part) =>
-                 {
-                     var random = new Random();
-                     var order = random.Next(0, files.Length);
-                     var file = files[order];
+            for (var part = 0; part < 100; part++)
+            {
+                var random = new Random();
+                var order = random.Next(0, files.Length);
+                var file = files[order];
 
-                     await PostFile(part, file);
-                 });
+                await PostFile(part, file);
+            }
         }
 
         private static async Task PostFile(int part, string file)
