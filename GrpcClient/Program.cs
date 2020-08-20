@@ -11,11 +11,11 @@ namespace GrpcClient
 {
     internal static class Program
     {
-        private static async Task Main(string[] args)
+        private static void Main(string[] args)
         {
             Console.Title = "Grpc Client";
 
-            Enumerable.Range(0, 100).AsParallel().ForAll(async (i) =>
+            Parallel.For(0, 100, async (i) =>
             {
                 await BatchProcess();
             });
