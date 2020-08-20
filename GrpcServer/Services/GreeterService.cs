@@ -16,10 +16,8 @@ namespace GrpcServer.Services
 
         public override Task<HelloReply> SayHello(HelloRequest request, ServerCallContext context)
         {
-            Task.Run(() =>
-            {
-                _logger.LogInformation("Request:{0}", request.Name);
-            });
+
+            //_logger.LogInformation("Request:{0}", request.Name);
 
             return Task.FromResult(new HelloReply
             {

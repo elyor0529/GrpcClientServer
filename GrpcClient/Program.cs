@@ -15,7 +15,10 @@ namespace GrpcClient
         {
             Console.Title = "Grpc Client";
 
-            await BatchProcess();
+            Enumerable.Range(0, 100).AsParallel().ForAll(async (i) =>
+            {
+                await BatchProcess();
+            });
 
             Console.WriteLine("Done!");
         }
