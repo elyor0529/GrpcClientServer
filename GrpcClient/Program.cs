@@ -17,14 +17,16 @@ namespace GrpcClient
 
             Parallel.For(0, 100, async (i) =>
             {
-                await BatchProcess();
+                BatchProcess(i).Wait();
             });
 
             Console.WriteLine("Done!");
         }
 
-        private static async Task BatchProcess()
+        private static async Task BatchProcess(int part)
         {
+            Console.WriteLine("Channel #" + part);
+
             var httpHandler = new HttpClientHandler
             {
                 ServerCertificateCustomValidationCallback = HttpClientHandler.DangerousAcceptAnyServerCertificateValidator
