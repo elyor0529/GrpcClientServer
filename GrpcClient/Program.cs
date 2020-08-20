@@ -15,18 +15,18 @@ namespace GrpcClient
         {
             Console.Title = "Grpc Client";
 
-            Parallel.For(0, 100, async (i) =>
+            var tasks = new Task[400];
+            for (var i = 0; i < tasks.Length; i++)
             {
-                BatchProcess(i).Wait();
-            });
+                tasks[i] = BatchProcess(i);
+            };
+            Task.WaitAll(tasks);
 
             Console.WriteLine("Done!");
         }
 
-        private static async Task BatchProcess(int part)
-        {
-            Console.WriteLine("Channel #" + part);
-
+        private static async Task BatchProcess(int clientNumber)
+        {            
             var httpHandler = new HttpClientHandler
             {
                 ServerCertificateCustomValidationCallback = HttpClientHandler.DangerousAcceptAnyServerCertificateValidator
@@ -36,28 +36,29 @@ namespace GrpcClient
                 HttpHandler = httpHandler
             });
             var client = new Greeter.GreeterClient(channel);
-
-            for (var i = 0; i < 1000; i++)
+            for (var i = 0; i < 3; i++)
             {
                 var file = Path.Combine(Environment.CurrentDirectory, "users.json");
 
-                await PostFile(client, i, file);
-            }
+                await PostFile(client, clientNumber, file);
+            } 
         }
 
-        private static async Task PostFile(Greeter.GreeterClient client, int part, string file)
+        private static async Task PostFile(Greeter.GreeterClient client, int clientNumber, string file)
         {
+
             var timer = new Stopwatch();
             timer.Start();
             var data = await File.ReadAllTextAsync(file);
             var response = await client.SayHelloAsync(new HelloRequest
             {
-                Name = $"Client{part} sending {Path.GetFileName(file)}",
+                Name = $"Client{clientNumber} sending {Path.GetFileName(file)}",
                 Data = data
             });
             timer.Stop();
 
             Console.WriteLine("Server pull:{0}({1:g})", response.Message, timer.Elapsed);
+
         }
     }
 }
