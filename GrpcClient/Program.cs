@@ -22,21 +22,6 @@ namespace GrpcClient
 
         private static async Task BatchProcess()
         {
-
-            var files = Directory.GetFiles(Path.Combine(Environment.CurrentDirectory, "db"), "*.json", SearchOption.AllDirectories);
-
-            for (var part = 0; part < 100; part++)
-            {
-                var random = new Random();
-                var order = random.Next(0, files.Length);
-                var file = files[order];
-
-                await PostFile(part, file);
-            }
-        }
-
-        private static async Task PostFile(int part, string file)
-        {
             var httpHandler = new HttpClientHandler
             {
                 ServerCertificateCustomValidationCallback = HttpClientHandler.DangerousAcceptAnyServerCertificateValidator
@@ -46,6 +31,17 @@ namespace GrpcClient
                 HttpHandler = httpHandler
             });
             var client = new Greeter.GreeterClient(channel);
+
+            for (var i = 0; i < 1000; i++)
+            {
+                var file = Path.Combine(Environment.CurrentDirectory, "users.json");
+
+                await PostFile(client, i, file);
+            }
+        }
+
+        private static async Task PostFile(Greeter.GreeterClient client, int part, string file)
+        {
             var timer = new Stopwatch();
             timer.Start();
             var data = await File.ReadAllTextAsync(file);
