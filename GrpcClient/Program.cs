@@ -15,10 +15,10 @@ namespace GrpcClient
         {
             Console.Title = "Grpc Client";
 
-            var tasks = new Task[400];
+            var tasks = new Task[1000];
             for (var i = 0; i < tasks.Length; i++)
             {
-                tasks[i] = BatchProcess(i);
+                tasks[i] = Task.Run(async () => await BatchProcess(i));
             };
             Task.WaitAll(tasks);
 
@@ -26,39 +26,33 @@ namespace GrpcClient
         }
 
         private static async Task BatchProcess(int clientNumber)
-        {            
+        {
             var httpHandler = new HttpClientHandler
             {
                 ServerCertificateCustomValidationCallback = HttpClientHandler.DangerousAcceptAnyServerCertificateValidator
             };
-            var channel = GrpcChannel.ForAddress("https://178.33.123.109:5001", new GrpcChannelOptions
+            using var channel = GrpcChannel.ForAddress("https://178.33.123.109:5001", new GrpcChannelOptions
             {
                 HttpHandler = httpHandler
             });
             var client = new Greeter.GreeterClient(channel);
-            for (var i = 0; i < 3; i++)
+
+            for (var i = 0; i < 100; i++)
             {
                 var file = Path.Combine(Environment.CurrentDirectory, "users.json");
+                var startTime = Environment.TickCount64;
+                var data = await File.ReadAllTextAsync(file);
+                var response = await client.SayHelloAsync(new HelloRequest
+                {
+                    Name = $"Client{clientNumber} pushing {Path.GetFileName(file)}",
+                    Data = data
+                });
+                var endTime = Environment.TickCount64;
+                var timer = new TimeSpan(endTime - startTime);
 
-                await PostFile(client, clientNumber, file);
-            } 
+                Console.WriteLine($"Pulled from server:{response.Message}({timer:g})");
+            }
         }
 
-        private static async Task PostFile(Greeter.GreeterClient client, int clientNumber, string file)
-        {
-
-            var timer = new Stopwatch();
-            timer.Start();
-            var data = await File.ReadAllTextAsync(file);
-            var response = await client.SayHelloAsync(new HelloRequest
-            {
-                Name = $"Client{clientNumber} sending {Path.GetFileName(file)}",
-                Data = data
-            });
-            timer.Stop();
-
-            Console.WriteLine("Server pull:{0}({1:g})", response.Message, timer.Elapsed);
-
-        }
     }
 }
