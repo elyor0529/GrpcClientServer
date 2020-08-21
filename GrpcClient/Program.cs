@@ -15,7 +15,7 @@ namespace GrpcClient
         {
             Console.Title = "Grpc Client";
 
-            var tasks = new Task[100];
+            var tasks = new Task[80];
             for (var i = 0; i < tasks.Length; i++)
             {
                 tasks[i] = BatchProcess(i);
@@ -31,13 +31,13 @@ namespace GrpcClient
             {
                 ServerCertificateCustomValidationCallback = HttpClientHandler.DangerousAcceptAnyServerCertificateValidator
             };
-            using var channel = GrpcChannel.ForAddress("https://178.33.123.109:5001", new GrpcChannelOptions
+            using var channel = GrpcChannel.ForAddress("https://178.33.123.109:5000", new GrpcChannelOptions
             {
                 HttpHandler = httpHandler
             });
             var client = new Greeter.GreeterClient(channel);
 
-            for (var i = 0; i < 5; i++)
+            for (var i = 0; i < 30; i++)
             {
                 var file = Path.Combine(Environment.CurrentDirectory, "users.json");
                 var startTime = DateTime.Now; // Environment.TickCount64;
