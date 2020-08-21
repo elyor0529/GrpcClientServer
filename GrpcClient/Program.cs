@@ -18,7 +18,7 @@ namespace GrpcClient
             var tasks = new Task[1000];
             for (var i = 0; i < tasks.Length; i++)
             {
-                tasks[i] = Task.Run(async () => await BatchProcess(i));
+                tasks[i] = BatchProcess(i);
             };
             Task.WaitAll(tasks);
 
