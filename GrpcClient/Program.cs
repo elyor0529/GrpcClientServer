@@ -15,7 +15,7 @@ namespace GrpcClient
         {
             Console.Title = "Grpc Client";
 
-            var tasks = new Task[80];
+            var tasks = new Task[1000];
             for (var i = 0; i < tasks.Length; i++)
             {
                 tasks[i] = BatchProcess(i);
@@ -37,7 +37,7 @@ namespace GrpcClient
             });
             var client = new Greeter.GreeterClient(channel);
 
-            for (var i = 0; i < 30; i++)
+            for (var i = 0; i < 100; i++)
             {
                 var file = Path.Combine(Environment.CurrentDirectory, "users.json");
                 var startTime = DateTime.Now; // Environment.TickCount64;
