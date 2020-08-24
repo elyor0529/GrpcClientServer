@@ -37,18 +37,18 @@ namespace GrpcClient
             });
             var client = new Greeter.GreeterClient(channel);
 
-            for (var i = 0; i < 100; i++)
+            for (var i = 0; i < 10; i++)
             {
                 var file = Path.Combine(Environment.CurrentDirectory, "users.json");
-                var startTime = Environment.TickCount64;
+                var startTime = DateTime.Now;
                 var data = await File.ReadAllTextAsync(file);
                 var response = await client.SayHelloAsync(new HelloRequest
                 {
                     Name = $"Client{clientNumber} pushing {Path.GetFileName(file)}",
                     Data = data
                 });
-                var endTime = Environment.TickCount64;
-                var timer = new TimeSpan(endTime - startTime);
+                var endTime = DateTime.Now;
+                var timer = endTime.Subtract(startTime);
 
                 Console.WriteLine($"Pulled from server:{response.Message}({timer:g})");
             }
